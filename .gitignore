@@ -1,0 +1,18 @@
+# Archivos de estado de Terraform
+*.tfstate
+*.tfstate.*
+*.backup
+
+# Archivos de plan guardados
+*.tfplan
+
+# Directorio local de Terraform (plugins y módulos)
+.terraform/
+
+# Archivo de variables sensibles (recomendado si contiene secretos)
+*.tfvars
+
+# Deshabilitado/Crash logs
+crash.log
+crash.*.log
+
