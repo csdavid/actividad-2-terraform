@@ -14,7 +14,7 @@ resource "aws_instance" "db_mongo" {
               sudo systemctl enable docker
               
               # Levantar MongoDB oficial en el puerto standard exponiéndolo a la red privada
-              sudo docker run -d --name mongodb -p 27017:27017 \
+              sudo docker run -d --name social_events -p 27017:27017 \
                 -e MONGO_INITDB_ROOT_USERNAME=${var.mongodb_user} \
                 -e MONGO_INITDB_ROOT_PASSWORD=${var.mongodb_password} \
                 mongo:latest
