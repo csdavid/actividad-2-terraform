@@ -36,6 +36,13 @@ resource "aws_security_group" "web_sg" {
     security_groups = [aws_security_group.alb_sg.id] 
   }
 
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # Puedes cambiarlo por ["TU_IP_PUBLICA/32"] por seguridad
+  }  
+
   egress { 
     from_port   = 0 
     to_port     = 0 
@@ -51,19 +58,26 @@ resource "aws_security_group" "db_sg" {
   name   = "mean-db-sg"
   vpc_id = var.vpc_id
 
-  ingress { 
-    from_port       = 27017 
-    to_port         = 27017 
-    protocol        = "tcp" 
-    security_groups = [aws_security_group.web_sg.id] 
+  # Regla explícita para SSH desde el mundo exterior
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
-  egress { 
-    from_port   = 0 
-    to_port     = 0 
-    protocol    = "-1" 
-    cidr_blocks = ["0.0.0.0/0"] 
+  # Regla explícita para MongoDB desde el mundo exterior
+  ingress {
+    from_port   = 27017
+    to_port     = 27017
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = { Name = "mean-db-sg" }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }

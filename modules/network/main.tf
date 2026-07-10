@@ -63,3 +63,23 @@ resource "aws_route_table_association" "pub_b_assoc" {
   subnet_id      = aws_subnet.public_b.id
   route_table_id = aws_route_table.public_rt.id
 }
+
+# modules/network/main.tf
+
+# 1. Crear la Tabla de Ruteo Privada que apunta al NAT Gateway
+resource "aws_route_table" "private_rt" {
+  vpc_id = aws_vpc.mean_vpc.id
+
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.nat.id # El nombre de tu recurso NAT Gateway
+  }
+
+  tags = { Name = "mean-private-rt" }
+}
+
+# 2. Asociar la Subred Privada a esta nueva Tabla de Ruteo
+resource "aws_route_table_association" "priv_assoc" {
+  subnet_id      = aws_subnet.private.id # El nombre de tu subred privada
+  route_table_id = aws_route_table.private_rt.id
+}
