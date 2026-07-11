@@ -2,13 +2,10 @@
 resource "aws_instance" "db_mongo" {
   ami                    = "ami-04a81a99f5ec58529" # Ubuntu 22.04 LTS
   instance_type          = "t3.micro"
-  # subnet_id              = var.private_subnet_id
-  # vpc_security_group_ids = [var.db_sg_id]
-  # --- ASIGNACIONES CORRECTAS Y OBLIGATORIAS ---
-  subnet_id                   = var.public_subnet_id   # Forzamos subred PÚBLICA temporalmente
-  vpc_security_group_ids      = [var.db_sg_id]          # ¡RECONECTAMOS EL SECURITY GROUP!
-  associate_public_ip_address = true                    # Forzamos IP Pública
-  key_name                    = "aws-practicas-unir"    # Tu llave SSH
+  subnet_id              = var.private_subnet_id
+  vpc_security_group_ids = [var.db_sg_id]
+  key_name               = "aws-practicas-unir"    # Tu llave SSH
+  user_data_replace_on_change = true
 
 
 user_data = <<-EOF
@@ -40,6 +37,7 @@ resource "aws_instance" "web_node" {
   vpc_security_group_ids      = [var.web_sg_id]
   associate_public_ip_address = true
   key_name                    = "aws-practicas-unir"
+  user_data_replace_on_change = true
 
   user_data = <<-EOF
               #!/bin/bash

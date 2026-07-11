@@ -58,20 +58,20 @@ resource "aws_security_group" "db_sg" {
   name   = "mean-db-sg"
   vpc_id = var.vpc_id
 
-  # Regla explícita para SSH desde el mundo exterior
+  # Regla para SSH únicamente desde el Nodo Web (actuando como Bastion)
   ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    security_groups = [aws_security_group.web_sg.id]
   }
 
-  # Regla explícita para MongoDB desde el mundo exterior
+  # Regla para MongoDB únicamente desde el Nodo Web
   ingress {
-    from_port   = 27017
-    to_port     = 27017
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    from_port       = 27017
+    to_port         = 27017
+    protocol        = "tcp"
+    security_groups = [aws_security_group.web_sg.id]
   }
 
   egress {

@@ -29,6 +29,8 @@ module "compute" {
   web_ami           = "ami-04a81a99f5ec58529" # Cambia por tu AMI de Packer si prefieres
   mongodb_user      = var.mongodb_user
   mongodb_password  = var.mongodb_password
+
+  depends_on = [module.network]
 }
 
 # =================================================================
